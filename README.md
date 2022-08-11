@@ -17,6 +17,7 @@ product = {
 
 //USING QUERY
 allowed query terms => [
+    'name',
     'sort',
     'price',
     'company',
@@ -39,10 +40,13 @@ URL/api/v1/products?featured=true // featured = true
 URL/api/v1/products?featured=false // featured = false
 
 //for filtering based on companies
-URL/api/v1/products?&company=ikea,marcos // company = ['ikea', 'marcos']
+URL/api/v1/products?company=ikea,marcos // company = ['ikea', 'marcos']
+
+//for filtering based on name of products
+URL/api/v1/products?name=wood // uses regex -i  to search for name
 
 //for sorting
-URL/api/v1/products?&company=ikea,marcos&sort=+price,-rating //same as above with price sorted in ascending order, and if price is the same, sort by rating in descending order
+URL/api/v1/products?company=ikea,marcos&sort=+price,-rating //same as above with price sorted in ascending order, and if price is the same, sort by rating in descending order
 
 /**
  * Query for sorting only accepts the same query terms.

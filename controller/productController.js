@@ -2,9 +2,13 @@ const AppError = require("../utils/appError");
 const Product = require("../models/product");
 
 exports.getAllProducts = async (req, res, next) => {
-  const { price, featured, rating, company, sort } = req.query;
+  const { name, price, featured, rating, company, sort } = req.query;
   const queryObject = {};
   const sortObject = {};
+  if (name) {
+    queryObject.name = { $regex: name, $options: "i" };
+  }
+
   if (price) {
     if (price.startsWith("-")) {
       queryObject.price = { $lte: price.slice(1) };
@@ -14,9 +18,11 @@ exports.getAllProducts = async (req, res, next) => {
       queryObject.price = { $eq: price };
     }
   }
+
   if (featured) {
     queryObject.featured = featured === "true";
   }
+
   if (rating) {
     if (rating.startsWith("-")) {
       queryObject.rating = { $lte: rating.slice(1) };
@@ -26,6 +32,7 @@ exports.getAllProducts = async (req, res, next) => {
       queryObject.rating = { $eq: rating };
     }
   }
+
   if (company) {
     queryObject.company = company.split(",").join(" ");
   }
@@ -36,6 +43,7 @@ exports.getAllProducts = async (req, res, next) => {
       sortObject[el] = el.startsWith("-") ? -1 : 1;
     });
   }
+
   const products = await Product.find(queryObject).sort(
     sortObject ? sortObject : { createdAt: -1 }
   );

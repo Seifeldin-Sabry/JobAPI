@@ -2,7 +2,8 @@ const AppError = require("../utils/appError");
 const Product = require("../models/product");
 
 exports.getAllProducts = async (req, res, next) => {
-  const { name, price, featured, rating, company, sort } = req.query;
+  const { name, price, featured, rating, company, sort, limit, page } =
+    req.query;
   const queryObject = {};
   const sortObject = {};
   if (name) {
@@ -44,9 +45,12 @@ exports.getAllProducts = async (req, res, next) => {
     });
   }
 
-  const products = await Product.find(queryObject).sort(
-    sortObject ? sortObject : { createdAt: -1 }
-  );
+  const skip = ((page * 1 || 1) - 1) * (limit * 1 || 10);
+
+  const products = await Product.find(queryObject)
+    .sort(sortObject ? sortObject : { createdAt: -1 })
+    .limit(limit ? limit : 10)
+    .skip(skip);
 
   return res.status(200).json({
     status: "success",
@@ -54,11 +58,5 @@ exports.getAllProducts = async (req, res, next) => {
     data: {
       products,
     },
-  });
-};
-
-exports.getAllProductsStatic = (req, res, next) => {
-  return res.status(200).json({
-    status: "success",
   });
 };

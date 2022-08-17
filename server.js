@@ -1,11 +1,11 @@
-const connectDB = require('./utils/connect')
-require('express-async-errors')
-const dotenv = require('dotenv');
+const connectDB = require("./utils/connect");
+require("express-async-errors");
+const dotenv = require("dotenv");
 dotenv.config({
-  path: './config.env',
+  path: "./config.env",
 });
 
-const app = require('./app');
+const app = require("./app");
 
 connectDB();
 
@@ -18,18 +18,18 @@ const server = app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled Rejection! shutting down...');
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection! shutting down...");
   console.log(reason.name, reason.message);
   server.close(() => {
-    process.exit(1)
-  })
-})
+    process.exit(1);
+  });
+});
 
-process.on('uncaughtException', (error, origin) => {
-  console.log('Uncaught Exception! shutting down...');
+process.on("uncaughtException", (error, origin) => {
+  console.log("Uncaught Exception! shutting down...");
   console.log(error.name, error.message);
   server.close(() => {
-    process.exit(1)
-  })
-})
+    process.exit(1);
+  });
+});
